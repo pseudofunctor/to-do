@@ -15,47 +15,49 @@ const addCompleteButtonListener = (completeButton, li, toDoItem) => {
 	});
 };
 
-items.forEach(toDoItem => {
-	let li = document.createElement("li");
-
+const createDeleteButton = () => {
 	let deleteButton = document.createElement("button");
 	deleteButton.innerHTML = "x";
+	return deleteButton;
+};
+
+const createCompleteButton = () => {
+	let completeButton = document.createElement("button");
+	completeButton.innerHTML = "v";
+	return completeButton;
+};
+
+items.forEach(toDoItem => {
+	let li = document.createElement("li");
 
 	li.innerHTML = toDoItem.name + " ";
 	if (toDoItem.complete) {
 		li.style.setProperty("text-decoration", "line-through");
 	} else {
-		let completeButton = document.createElement("button");
-		completeButton.innerHTML = "v";
+		let completeButton = createCompleteButton();
 		li.appendChild(completeButton);
 		addCompleteButtonListener(completeButton, li, toDoItem);
 	}
 
-	li.appendChild(deleteButton);
+	li.appendChild(createDeleteButton());
 	ul.appendChild(li);
 });
 
 form.addEventListener("submit", event => {
 	event.preventDefault();
 	let newEntry = document.createElement("li");
-	
-	let completeButton = document.createElement("button");
-	completeButton.innerHTML = "v";
-
-	let deleteButton = document.createElement("button");
-	deleteButton.innerHTML = "x";
-
 	newEntry.innerHTML = userEntry.value + " ";
-	newEntry.appendChild(completeButton);
-
+	
 	let toDoItem = {
 		name: userEntry.value,
 		complete: false
 	};
+	items.push(toDoItem);
 
+	let completeButton = createCompleteButton();
+	newEntry.appendChild(completeButton);
 	addCompleteButtonListener(completeButton, newEntry, toDoItem);
 
-
-	newEntry.appendChild(deleteButton);
+	newEntry.appendChild(createDeleteButton());
 	ul.appendChild(newEntry);
 });
