@@ -3,7 +3,7 @@ const form = document.querySelector("form");
 const userEntry = document.getElementById("toDoItem");
 const ul = document.querySelector("ul");
 
-const items = [
+let items = [
 	{ name: "Eat an orange", complete: false },
 	{ name: "Go to the gym", complete: true }
 ];
@@ -12,6 +12,13 @@ const addCompleteButtonListener = (completeButton, li, toDoItem) => {
 	completeButton.addEventListener("click", () => {
 		li.style.setProperty("text-decoration", "line-through");
 		toDoItem.complete = true;
+	});
+};
+
+const addDeleteButtonListener = (deleteButton, li, toDoItem) => {
+	deleteButton.addEventListener("click", () => {
+		items = items.filter(item => item.name !== toDoItem.name);
+		li.parentNode.removeChild(li);
 	});
 };
 
@@ -39,7 +46,10 @@ items.forEach(toDoItem => {
 		addCompleteButtonListener(completeButton, li, toDoItem);
 	}
 
-	li.appendChild(createDeleteButton());
+	let deleteButton = createDeleteButton();
+	li.appendChild(deleteButton);
+	addDeleteButtonListener(deleteButton, li, toDoItem);
+
 	ul.appendChild(li);
 });
 
@@ -48,16 +58,18 @@ form.addEventListener("submit", event => {
 	let newEntry = document.createElement("li");
 	newEntry.innerHTML = userEntry.value + " ";
 	
-	let toDoItem = {
-		name: userEntry.value,
-		complete: false
-	};
+	let toDoItem = { name: userEntry.value, complete: false };
 	items.push(toDoItem);
 
 	let completeButton = createCompleteButton();
 	newEntry.appendChild(completeButton);
 	addCompleteButtonListener(completeButton, newEntry, toDoItem);
 
-	newEntry.appendChild(createDeleteButton());
+	let deleteButton = createDeleteButton();
+	newEntry.appendChild(deleteButton);
+	addDeleteButtonListener(deleteButton, newEntry, toDoItem);
+
 	ul.appendChild(newEntry);
 });
+
+
